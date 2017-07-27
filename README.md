@@ -28,7 +28,7 @@ var html = dg.theme('quick_tabs', {
           }
         },
         {
-          _text: dg.l('Meh', null),
+          _text: dg.l('Boo', null),
           _attributes: {
             title: dg.t('789')
           }
@@ -40,25 +40,29 @@ var html = dg.theme('quick_tabs', {
     _panes: function(quickTabs, delta) {
       var element = {};
       switch (delta) {
+
         case 0:
-          content.stuff = {
+          element.stuff = {
             _markup: 'bar markup'
           };
           break;
+
         case 1:
-            content = 'baz text';
+            element = 'baz text';
           break;
+
         case 2:
-          content.stuff = {
+          element.stuff = {
             _theme: 'bucket',
             _grab: function() {
               return new Promise(function(ok, err) {
                 // Make a call to the server...
-                ok('Meh result');
+                ok('Boo result');
               });
             }
           };
           break;
+
       }
       return element;
     }
