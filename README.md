@@ -81,3 +81,17 @@ element.foo = {
 };
 return element;
 ```
+
+## Using with Bootstrap
+
+```
+// @see http://getbootstrap.com/components/#nav
+element.foo = {
+  _theme: 'quick_tabs',
+  _attributes: {
+    class: ['nav', 'nav-tabs']
+  },
+  _tabs: { /* ... */ },
+  _panes: { /* ... */ }
+};
+```
