@@ -27,10 +27,14 @@ dg.theme_quick_tabs = function(variables) {
   dg._quick_tabs[id] = variables;
   var quickTabs = dg._quick_tabs[id];
 
+  // Figure out the default tab delta.
+  if (typeof variables._delta === 'undefined') { variables._delta = 0; }
+  var defaultDelta = variables._delta;
+
   // Open the wrapper.
   var html = '<div ' + dg.attrs(variables) + '>';
 
-  // Render the tabs.
+  // Initialize the attributes for the tabs and then render them.
   dg.attributesInit(tabs);
   tabs._attributes.class.push('quick-tabs');
   html += dg.theme('item_list', tabs);
@@ -40,7 +44,6 @@ dg.theme_quick_tabs = function(variables) {
 
   // Render the panes empty and hidden
   for (var i = 0; i < tabs._items.length; i++) {
-    var tab = tabs._items[i];
     html += '<div class="quick-tabs-pane hidden" data-quick-tabs-pane="' + i + '"></div>';
   }
 
@@ -78,10 +81,18 @@ dg.theme_quick_tabs = function(variables) {
 
         if (!_listItem || !_list) { return; } // Bail out if we couldn't find the list item or the list.
 
+        // Remove active class from previous active tab.
+        for (var l = 0; l < listItems.length; l++) {
+          if (dg.hasClass(listItems[l], 'active')) {
+            dg.removeClass(listItems[l], 'active');
+          }
+        }
+
         // Figure out the delta of the clicked item.
         var delta = Array.prototype.indexOf.call(_list.childNodes, _listItem);
-        //var pane = quickTabs._panes[delta];
-        //if (!pane) { return; }
+
+        // Add an active class to the list item.
+        if (!dg.hasClass(listItems[delta], 'active')) { dg.addClass(listItems[delta], 'active'); }
 
         // Hide all sibling panes.
         for (var k = 0; k < _list.childNodes.length; k++) {
@@ -115,8 +126,6 @@ dg.theme_quick_tabs = function(variables) {
     }
 
     // If there is a default delta, simulate a click on it to set the default tab.
-    if (typeof variables._delta === 'undefined') { variables._delta = 0; }
-    var defaultDelta = variables._delta;
     if (listItems[defaultDelta]) { listItems[defaultDelta].click(); }
 
   }, 1);
