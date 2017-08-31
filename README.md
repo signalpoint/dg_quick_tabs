@@ -103,7 +103,6 @@ element.foo = {
     position: fixed;
     top: 50px;
     width: 100%;
-    z-index: 2;
     background-color: white;
 }
 .quick-tabs-wrapper .quick-tabs-panes {
