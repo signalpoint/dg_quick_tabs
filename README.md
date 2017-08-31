@@ -95,3 +95,20 @@ element.foo = {
   _panes: { /* ... */ }
 };
 ```
+
+## Stick Tabs at Top After Scroll
+
+```
+.quick-tabs-wrapper .quick-tabs {
+    position: fixed;
+    top: 50px;
+    width: 100%;
+    z-index: 2;
+    background-color: white;
+}
+.quick-tabs-wrapper .quick-tabs-panes {
+    margin-top: 54px;
+}
+```
+
+Credit goes to [this answer on Stack Overflow](https://stackoverflow.com/a/1216130/763010). 
