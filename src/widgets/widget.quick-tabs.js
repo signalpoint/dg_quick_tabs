@@ -18,7 +18,7 @@ dg.theme_quick_tabs = function(variables) {
   var attrs = variables._attributes;
 
   // Grab the container id, or generate a random one.
-  if (!attrs.id) { attrs.id = 'quick-tabs-' + dg.userPassword(); }
+  if (!attrs.id) { attrs.id = 'quick-tabs-' + dg.salt(); }
   var id = attrs.id;
 
   variables._attributes.class.push('quick-tabs-wrapper');
