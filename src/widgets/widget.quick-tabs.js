@@ -59,24 +59,46 @@ dg.theme_quick_tabs = function(variables) {
         // Grab the element that was clicked.
         var _item = event.target;
 
+        //console.log('click', _item);
+
         // The clicked element won't necessarily be the <li> housing the item, so we traverse up the DOM from the
-        // target clicked element in search of the <li> around it. When we find the list item, grab a reference to the
-        // list itself.
+        // target clicked element in search of the <li> around it. When we find the list item, also grab a reference to
+        // the list itself (typically an unordered list).
+        // @TODO iOS device web applications don't seem to support "event.path" so we fall back to "parentNode" here.
+        // This could use some clean up and more thorough testing.
         var _list = null;
         var _listItem = null;
         if (_item.tagName != 'LI') {
-          for (var j = 0; j < event.path.length; j++) {
-            var path = event.path[j];
-            if (path.tagName == 'LI') {
-              _list = event.path[j+1];
-              _listItem = path;
-              break;
+          if (event.path) {
+            for (var j = 0; j < event.path.length; j++) {
+              var path = event.path[j];
+              if (path.tagName == 'LI') {
+                _list = event.path[j+1];
+                _listItem = path;
+                break;
+              }
             }
+          }
+          else { // iOS web app special case.
+            _listItem = _item.parentNode;
+            _list = _listItem.parentNode;
           }
         }
         else {
-          _list = event.path[1];
-          _listItem = event.path[0];
+          //console.log('event: ' + _item.tagName, event);
+          //console.log('target', event.target);
+          if (event.path) {
+            _list = event.path[1];
+            _listItem = event.path[0];
+          }
+          else { // iOS web app special case.
+            _list = _item.parentNode;
+            _listItem = _item;
+            //console.log('_list', _list);
+            //console.log('_listItem', _listItem);
+            //console.log('_list.childNodes', _list.childNodes);
+          }
+
         }
 
         if (!_listItem || !_list) { return; } // Bail out if we couldn't find the list item or the list.
@@ -121,6 +143,9 @@ dg.theme_quick_tabs = function(variables) {
 
         // Show the active pane.
         dg.removeClass(paneDiv, 'hidden');
+
+        // Invoke the developer's click handler, if any.
+        if (quickTabs._click) { quickTabs._click(quickTabs, delta); }
 
       });
     }
