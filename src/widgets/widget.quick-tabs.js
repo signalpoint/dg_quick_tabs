@@ -11,21 +11,25 @@
  */
 dg.theme_quick_tabs = function(variables) {
 
-  // Extract the tabs, and skip rendering if there aren't any.
-  var tabs = variables._tabs;
-  if (!tabs || !tabs._items) { return ''; }
-
   var attrs = variables._attributes;
 
   // Grab the container id, or generate a random one.
   if (!attrs.id) { attrs.id = 'quick-tabs-' + dg.salt(); }
   var id = attrs.id;
 
-  variables._attributes.class.push('quick-tabs-wrapper');
+  // Extract the tabs, and skip rendering if there aren't any.
+  var tabs = variables._tabs;
+  if (!tabs || !tabs._items) { return ''; }
+  // WARNING: Do not use the "tabs" variable below for any modifications, use variables._tabs instead, or your
+  // modifications will be lost upon reload.
 
-  // Set the quick tabs aside.
-  dg._quick_tabs[id] = variables;
-  var quickTabs = dg._quick_tabs[id];
+  // Have these tabs been loaded before?
+  var quickTabs = dg_quick_tabs.load(id);
+  var loadedBefore = !!quickTabs;
+
+  // If they've been loaded before, use them instead of starting fresh. Otherwise add the wrapper class.
+  if (loadedBefore) { variables = quickTabs; }
+  else { attrs.class.push('quick-tabs-wrapper'); }
 
   // Figure out the default tab delta.
   if (typeof variables._delta === 'undefined') { variables._delta = 0; }
@@ -35,9 +39,16 @@ dg.theme_quick_tabs = function(variables) {
   var html = '<div ' + dg.attrs(variables) + '>';
 
   // Initialize the attributes for the tabs and then render them.
-  dg.attributesInit(tabs);
-  tabs._attributes.class.push('quick-tabs');
-  html += dg.theme('item_list', tabs);
+  if (!loadedBefore) {
+    dg.attributesInit(variables._tabs);
+    variables._tabs._attributes.class.push('quick-tabs');
+
+    // Set the quick tabs aside.
+    quickTabs = dg_quick_tabs.save(id, variables);
+  }
+
+  // Render the tabs.
+  html += dg.theme('item_list', variables._tabs);
 
   // Open the panes container.
   html += '<div class="quick-tabs-panes">';
@@ -127,6 +138,8 @@ dg.theme_quick_tabs = function(variables) {
         var paneDiv = document.querySelector('#' + id + ' div[data-quick-tabs-pane="' + delta + '"]');
 
         // Only render the pane if it is empty (aka render it once the first time), then no matter what un hide it.
+        // @TODO use memory to capture innerHTML so revisiting a QT on the same route later can be loaded from memory
+        // instead of making a potentially unnecessary round trip to Drupal. Make this configurable, e.g. _cache.
         if (paneDiv.innerHTML == '') {
 
           // Call the quick tabs panes handler, and inject its html into the correct pane. If the developer returns a
@@ -146,6 +159,10 @@ dg.theme_quick_tabs = function(variables) {
 
         // Invoke the developer's click handler, if any.
         if (quickTabs._click) { quickTabs._click(quickTabs, delta); }
+
+        // Track which delta was clicked, so when navigating back to the route that hosts the widget, we can set the
+        // default tab to the one the user left off on.
+        quickTabs._delta = delta;
 
       });
     }
