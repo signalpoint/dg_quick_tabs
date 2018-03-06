@@ -7,6 +7,7 @@ var gulp = require('gulp'),
 
 var dgQuickTabsModuleSrc = [
   './src/_dg_quick_tabs.js',
+  './src/includes/include.*.js',
   './src/widgets/widget.*.js'
 ];
 
