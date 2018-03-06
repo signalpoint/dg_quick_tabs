@@ -65,6 +65,13 @@ var html = dg.theme('quick_tabs', {
 
       }
       return element;
+    },
+
+    // Optional, click handler for when a tab is clicked.
+    _click: function(quickTabs, delta) {
+
+      console.log('click!', delta);
+
     }
 
   });
