@@ -114,15 +114,19 @@ dg.theme_quick_tabs = function(variables) {
 
         if (!_listItem || !_list) { return; } // Bail out if we couldn't find the list item or the list.
 
+        // Figure out the delta of the clicked item.
+        var delta = Array.prototype.indexOf.call(_list.childNodes, _listItem);
+
+        // Invoke the developer's pre-click handler, if any.
+        var previousDelta = quickTabs._delta;
+        if (quickTabs._preClick) { quickTabs._preClick(quickTabs, delta, previousDelta); }
+
         // Remove active class from previous active tab.
         for (var l = 0; l < listItems.length; l++) {
           if (dg.hasClass(listItems[l], 'active')) {
             dg.removeClass(listItems[l], 'active');
           }
         }
-
-        // Figure out the delta of the clicked item.
-        var delta = Array.prototype.indexOf.call(_list.childNodes, _listItem);
 
         // Add an active class to the list item.
         if (!dg.hasClass(listItems[delta], 'active')) { dg.addClass(listItems[delta], 'active'); }
@@ -158,7 +162,7 @@ dg.theme_quick_tabs = function(variables) {
         dg.removeClass(paneDiv, 'hidden');
 
         // Invoke the developer's click handler, if any.
-        if (quickTabs._click) { quickTabs._click(quickTabs, delta); }
+        if (quickTabs._click) { quickTabs._click(quickTabs, delta, previousDelta); }
 
         // Track which delta was clicked, so when navigating back to the route that hosts the widget, we can set the
         // default tab to the one the user left off on.
