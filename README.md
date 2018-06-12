@@ -4,6 +4,8 @@ The Quick Tabs widget for DrupalGap 8. A must have widget for tabbed content and
 
 With a `quick_tabs` widget, you can easily render a list of tabs that when clicked each render their own custom content.
 
+Also check out the `quick_select` widget below, to use a select list and options instead of tabs.
+
 ```
 var html = dg.theme('quick_tabs', {
     _tabs: {
@@ -84,6 +86,8 @@ var html = dg.theme('quick_tabs', {
   });
 ```
 
+The `_tabs` property is simply a [list widget](http://docs.drupalgap.org/8/Widgets/List_Widget).
+
 Like all widgets, a `quick_tabs` can easily be ran through the DrupalGap render element system as well:
 
 ```
@@ -127,3 +131,25 @@ element.foo = {
 ```
 
 Credit goes to [this answer on Stack Overflow](https://stackoverflow.com/a/1216130/763010). 
+
+## Quick Select
+
+If you'd like to use a select list with options instead of tabs, it has almost the exact same usage, except:
+
+- replace `quick_tabs` with `quick_select`
+- replace the usage of `_tabs` with a [select widget](http://docs.drupalgap.org/8/Widgets/Select_List_Widget) instead of a [list widget](http://docs.drupalgap.org/8/Widgets/List_Widget)
+
+```
+element.foo = {
+  _theme: 'quick_select',
+  _tabs: {
+    /* ... */
+    _options: {
+      123: dg.t('Option 1'),
+      456: dg.t('Option 2'),
+      789: dg.t('Option 3')
+    }
+  },
+  _panes: { /* ... */ }
+};
+```
