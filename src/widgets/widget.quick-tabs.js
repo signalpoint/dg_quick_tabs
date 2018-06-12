@@ -14,8 +14,7 @@ dg.theme_quick_tabs = function(variables) {
   var attrs = variables._attributes;
 
   // Grab the container id, or generate a random one.
-  if (!attrs.id) { attrs.id = 'quick-tabs-' + dg.salt(); }
-  var id = attrs.id;
+  var id = dg.qtContainerId(attrs);
 
   // Extract the tabs, and skip rendering if there aren't any.
   var tabs = variables._tabs;
@@ -25,7 +24,7 @@ dg.theme_quick_tabs = function(variables) {
 
   // Have these tabs been loaded before?
   var quickTabs = dg_quick_tabs.load(id);
-  var loadedBefore = !!quickTabs;
+  var loadedBefore = dg.qtLoadedBefore(id);
 
   // If they've been loaded before, use them instead of starting fresh. Otherwise add the wrapper class.
   if (loadedBefore) { variables = quickTabs; }
@@ -35,10 +34,10 @@ dg.theme_quick_tabs = function(variables) {
   if (typeof variables._delta === 'undefined') { variables._delta = 0; }
   var defaultDelta = variables._delta;
 
-  // Open the wrapper.
-  var html = '<div ' + dg.attrs(variables) + '>';
+  // Open the wrapper. If bootstrap is present, add a nice css class for the wrapper.
+  var html = dg.qtWrapperOpener(variables);
 
-  // Initialize the attributes for the tabs and then render them.
+  // Initialize the attributes for the tabs.
   if (!loadedBefore) {
     dg.attributesInit(variables._tabs);
     variables._tabs._attributes.class.push('quick-tabs');
@@ -47,19 +46,19 @@ dg.theme_quick_tabs = function(variables) {
     quickTabs = dg_quick_tabs.save(id, variables);
   }
 
-  // Render the tabs.
+  // Render the tabs (or select list)...
   html += dg.theme('item_list', variables._tabs);
 
   // Open the panes container.
-  html += '<div class="quick-tabs-panes">';
+  html += dg.qtPanesOpener();
 
   // Render the panes empty and hidden
-  for (var i = 0; i < tabs._items.length; i++) {
-    html += '<div class="quick-tabs-pane hidden" data-quick-tabs-pane="' + i + '"></div>';
-  }
+  html += dg.qtPanesEmptyAndHidden(variables);
 
   // After the html is returned and rendered on the page...
   setTimeout(function() {
+
+    // TABS ONLY...
 
     // Grab the tabs and attach a click listener to each.
     var listItems = document.querySelectorAll('#' + id + ' .quick-tabs li');
@@ -117,9 +116,10 @@ dg.theme_quick_tabs = function(variables) {
         // Figure out the delta of the clicked item.
         var delta = Array.prototype.indexOf.call(_list.childNodes, _listItem);
 
-        // Invoke the developer's pre-click handler, if any.
+        // Hold onto the previous delta.
         var previousDelta = quickTabs._delta;
-        if (quickTabs._preClick) { quickTabs._preClick(quickTabs, delta, previousDelta); }
+
+        dg.qtInvokePreClick(quickTabs, delta, previousDelta);
 
         // Remove active class from previous active tab.
         for (var l = 0; l < listItems.length; l++) {
@@ -131,38 +131,26 @@ dg.theme_quick_tabs = function(variables) {
         // Add an active class to the list item.
         if (!dg.hasClass(listItems[delta], 'active')) { dg.addClass(listItems[delta], 'active'); }
 
+        // @TODO Abstract most everything after here...
+
         // Hide all sibling panes.
+        // @TODO use/improve the include.spaghetti.js here.
         for (var k = 0; k < _list.childNodes.length; k++) {
           if (k == delta) { continue; }
-          var otherPane = document.querySelector('#' + id + ' div[data-quick-tabs-pane="' + k + '"]');
+          var selector = '#' + id + ' div[data-quick-tabs-pane="' + k + '"]';
+          var otherPane = dg.qs(selector);
           dg.addClass(otherPane, 'hidden');
         }
 
         // Grab the corresponding pane for the clicked tab's delta.
-        var paneDiv = document.querySelector('#' + id + ' div[data-quick-tabs-pane="' + delta + '"]');
+        var paneDiv = dg.qtGetPaneDiv(id, delta);
 
-        // Only render the pane if it is empty (aka render it once the first time), then no matter what un hide it.
-        // @TODO use memory to capture innerHTML so revisiting a QT on the same route later can be loaded from memory
-        // instead of making a potentially unnecessary round trip to Drupal. Make this configurable, e.g. _cache.
-        if (paneDiv.innerHTML == '') {
-
-          // Call the quick tabs panes handler, and inject its html into the correct pane. If the developer returns a
-          // Promise, wait until it is resolved to inject its html into the pane.
-          var pane = quickTabs._panes(quickTabs, delta);
-          if (jDrupal.isPromise(pane)) {
-            pane.then(function(_html) {
-              paneDiv.innerHTML = dg.render(_html, true);
-            });
-          }
-          else { paneDiv.innerHTML = dg.render(pane, true); }
-
-        }
+        dg.qtRenderPane(paneDiv, quickTabs, delta);
 
         // Show the active pane.
         dg.removeClass(paneDiv, 'hidden');
 
-        // Invoke the developer's click handler, if any.
-        if (quickTabs._click) { quickTabs._click(quickTabs, delta, previousDelta); }
+        dg.qtInvokePostClick(quickTabs, delta, previousDelta);
 
         // Track which delta was clicked, so when navigating back to the route that hosts the widget, we can set the
         // default tab to the one the user left off on.
