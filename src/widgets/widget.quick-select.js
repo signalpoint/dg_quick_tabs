@@ -22,7 +22,7 @@ dg.theme_quick_select = function(variables) {
   // Prep the quick tabs.
   variables = dg.qtGetReady(id, variables);
 
-  // @TODO Figure out the default tab delta like we do with quick tabs?
+  var defaultDelta = dg.qtGetDefaultDelta(variables);
 
   // Open the wrapper.
   var html = dg.qtWrapperOpener(variables);
@@ -39,7 +39,12 @@ dg.theme_quick_select = function(variables) {
   // After the html is returned and rendered on the page...
   setTimeout(function() {
 
-    dg.qtGetSelect(id).dispatchEvent(new Event('change', { 'bubbles': true }));
+    if (defaultDelta >= 0) {
+      var select = dg.qtGetSelect(id);
+      select.selectedIndex = defaultDelta;
+    }
+    select.dispatchEvent(new Event('change', { 'bubbles': true }));
+
 
   }, 1);
 
