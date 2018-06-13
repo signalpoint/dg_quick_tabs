@@ -31,8 +31,7 @@ dg.theme_quick_tabs = function(variables) {
   else { attrs.class.push('quick-tabs-wrapper'); }
 
   // Figure out the default tab delta.
-  if (typeof variables._delta === 'undefined') { variables._delta = 0; }
-  var defaultDelta = variables._delta;
+  var defaultDelta = dg.qtGetDefaultDelta(variables);
 
   // Open the wrapper. If bootstrap is present, add a nice css class for the wrapper.
   var html = dg.qtWrapperOpener(variables);
