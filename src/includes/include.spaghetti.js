@@ -137,3 +137,8 @@ dg.qtIsSelect = function(variables) {
 dg.qtGetSelect = function(id) {
   return dg.qs('#' + id + ' select');
 };
+
+dg.qtGetDefaultDelta = function(variables) {
+  if (typeof variables._delta === 'undefined') { variables._delta = 0; }
+  return variables._delta;
+};
