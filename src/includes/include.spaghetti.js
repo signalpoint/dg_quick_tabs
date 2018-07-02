@@ -59,11 +59,12 @@ dg.qtGetReady = function(id, variables) {
 };
 
 dg.qtRenderPane = function(paneDiv, quickTabs, delta) {
+  var refresh = !!quickTabs._refresh;
 
   // Only render the pane if it is empty (aka render it once the first time).
   // @TODO use memory to capture innerHTML so revisiting a QT on the same route later can be loaded from memory
   // instead of making a potentially unnecessary round trip to Drupal. Make this configurable, e.g. _cache.
-  if (paneDiv.innerHTML != '') { return; }
+  if (!refresh && paneDiv.innerHTML != '') { return; }
 
   // Call the quick tabs panes handler, and inject its html into the correct pane. If the developer returns a
   // Promise, wait until it is resolved to inject its html into the pane.

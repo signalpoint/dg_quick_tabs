@@ -81,7 +81,13 @@ var html = dg.theme('quick_tabs', {
 
       console.log('click!', delta);
 
-    }
+    },
+    
+    // Optional, specify the default active tab. Defaults to 0.
+    _delta: 1,
+    
+    // Optional, force reload the active tab's html each time it is shown, defaults to false.
+    _refresh: true, 
 
   });
 ```

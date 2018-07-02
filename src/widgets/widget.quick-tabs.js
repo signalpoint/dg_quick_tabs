@@ -3,6 +3,7 @@
  * @param variables
  *  _tabs {Object} An item_list widget that will be used to render the tabs. @see Item List Widget
  *  _delta {Number} Optional, the index of the tab to set as the default. Defaults to 0.
+ *  _refresh {Boolean} Optional, set to true to force reload the pane's html each time. Defaults to false.
  *  _panes {Function} A function to handle what content to display, it will be passed two arguments:
  *      %param quickTabs {Object} Contains all data about the quick tabs widget.
  *      %param delta {Number} The index of the tab that was clicked.

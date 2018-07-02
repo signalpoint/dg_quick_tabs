@@ -3,6 +3,7 @@
  * @param variables
  *  _tabs {Object} An select widget that will be used to render the options. @see Select Widget
  *  _delta {Number} Optional, the index of the tab to set as the default. Defaults to 0.
+ *  _refresh {Boolean} Optional, set to true to force reload the pane's html each time. Defaults to false.
  *  _panes {Function} A function to handle what content to display, it will be passed two arguments:
  *      %param quickTabs {Object} Contains all data about the quick tabs widget.
  *      %param delta {Number} The index of the option that was clicked.
@@ -39,12 +40,14 @@ dg.theme_quick_select = function(variables) {
   // After the html is returned and rendered on the page...
   setTimeout(function() {
 
+    // Set the default option.
     if (defaultDelta >= 0) {
       var select = dg.qtGetSelect(id);
       select.selectedIndex = defaultDelta;
     }
-    select.dispatchEvent(new Event('change', { 'bubbles': true }));
 
+    // Simulate the change event to render the default pane.
+    select.dispatchEvent(new Event('change', { 'bubbles': true }));
 
   }, 1);
 
