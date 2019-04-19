@@ -74,7 +74,7 @@ var html = dg.theme('quick_tabs', {
 
       console.log('pre click!', delta);
 
-    }
+    },
 
     // Optional, click handler for when a tab is clicked, after any workers get called.
     _click: function(quickTabs, delta, previousDelta) {
