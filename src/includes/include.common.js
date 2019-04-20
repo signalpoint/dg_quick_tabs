@@ -10,3 +10,26 @@ dg_quick_tabs.save = function(id, variables) {
 dg_quick_tabs.clear = function() {
   dg._quick_tabs = {};
 };
+
+dg_quick_tabs.getTabs = function(id) {
+  return document.querySelectorAll('#' + id + ' li');
+};
+
+/**
+ * A little helper object to support multi "page" forms via tabs.
+ */
+dg_quick_tabs.forms = {
+  goToTab: function(id, delta) {
+    var tabs = dg_quick_tabs.getTabs(id);
+    dg_quick_tabs.forms.disableTabs(id, delta);
+    var li = tabs[delta];
+    li.classList.remove('disabled');
+    li.click();
+  },
+  disableTabs: function(id, delta) {
+    var tabs = dg_quick_tabs.getTabs(id);
+    for (var i = delta; i < tabs.length; i++) {
+      tabs[i].classList.add('disabled');
+    }
+  }
+};
