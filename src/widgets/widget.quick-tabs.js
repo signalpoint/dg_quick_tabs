@@ -113,6 +113,8 @@ dg.theme_quick_tabs = function(variables) {
 
         if (!_listItem || !_list) { return; } // Bail out if we couldn't find the list item or the list.
 
+        if (_listItem.classList.contains('disabled')) { return; } // Bail out if the tab is disabled.
+
         // Figure out the delta of the clicked item.
         var delta = Array.prototype.indexOf.call(_list.childNodes, _listItem);
 
