@@ -102,8 +102,37 @@ dg.qtHideAllSiblingPanes = function(id, delta) {
   }
 };
 
-dg.qtPanesOpener = function() {
-  return '<div class="quick-tabs-panes">';
+dg.qtPanesOpener = function(attrs) {
+  var className = 'quick-tabs-panes';
+  if (!jDrupal.inArray(className, attrs.class)) { attrs.class.push(className); }
+  return '<div ' + dg.attributes(attrs) + '>';
+};
+
+dg.qtPanesAttributes = function(variables) {
+  var attrs = variables._panesAttrs ? variables._panesAttrs : null;
+  if (!attrs) {
+    var el = {};
+    dg.attributesInit(el);
+    attrs = el._attributes;
+  }
+  return attrs;
+};
+
+dg.qtPaneDiv = function(attrs, i) {
+  attrs.class.push('quick-tabs-pane');
+  attrs.class.push('hidden');
+  attrs['data-quick-tabs-pane'] = '' + i;
+  return '<div ' + dg.attributes(attrs) + '></div>';
+};
+
+dg.qtPaneAttributes = function(variables) {
+  var attrs = variables._paneAttrs ? variables._paneAttrs : null;
+  if (!attrs) {
+    var el = {};
+    dg.attributesInit(el);
+    attrs = el._attributes;
+  }
+  return attrs;
 };
 
 /**
@@ -122,7 +151,7 @@ dg.qtPanesEmptyAndHidden = function(variables) {
   //console.log('itemCount', itemCount);
   //console.log(variables);
   for (var i = 0; i < itemCount; i++) {
-    html += '<div class="quick-tabs-pane hidden" data-quick-tabs-pane="' + i + '"></div>';
+    html += dg.qtPaneDiv(dg.qtPaneAttributes(variables), i);
   }
   return html;
 };
