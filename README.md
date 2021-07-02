@@ -101,7 +101,7 @@ var element = {};
 element.foo = {
   _theme: 'quick_tabs',
   _tabs: { /* ... */ },
-  _panes: { /* ... */ }
+  _panes: function () { /* ... */ }
 };
 return element;
 ```
@@ -120,6 +120,21 @@ element.foo = {
   },
   _panes: { /* ... */ }
 };
+```
+
+## Add Attributes to Panes Wrapper
+
+```
+var element = {};
+element.foo = {
+  _theme: 'quick_tabs',
+  _tabs: { /* ... */ },
+  _panesAttrs: {
+    class: ['my-custom-class']
+  },
+  _panes: function () { /* ... */ }
+};
+return element;
 ```
 
 ## Stick Tabs at Top After Scroll
@@ -156,7 +171,7 @@ element.foo = {
       789: dg.t('Option 3')
     }
   },
-  _panes: { /* ... */ }
+  _panes: function () { /* ... */ }
 };
 ```
 
