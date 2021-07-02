@@ -8,6 +8,7 @@
  *      %param quickTabs {Object} Contains all data about the quick tabs widget.
  *      %param delta {Number} The index of the tab that was clicked.
  *      %return {Promise|String} Return a Promise and resolve it with an html string, or just return an html string.
+ *  _panesAttrs {Object} An attributes object for the panes container element.
  * @return {String} The html string of a rendered quick tabs widget.
  */
 dg.theme_quick_tabs = function(variables) {
@@ -50,7 +51,7 @@ dg.theme_quick_tabs = function(variables) {
   html += dg.theme('item_list', variables._tabs);
 
   // Open the panes container.
-  html += dg.qtPanesOpener();
+  html += dg.qtPanesOpener(dg.qtPanesAttributes(variables));
 
   // Render the panes empty and hidden
   html += dg.qtPanesEmptyAndHidden(variables);
@@ -127,11 +128,17 @@ dg.theme_quick_tabs = function(variables) {
         for (var l = 0; l < listItems.length; l++) {
           if (dg.hasClass(listItems[l], 'active')) {
             dg.removeClass(listItems[l], 'active');
+            var link = listItems[l].querySelector('a');
+            if (link) { link.classList.remove('active'); }
           }
         }
 
         // Add an active class to the list item.
-        if (!dg.hasClass(listItems[delta], 'active')) { dg.addClass(listItems[delta], 'active'); }
+        if (!dg.hasClass(listItems[delta], 'active')) {
+          dg.addClass(listItems[delta], 'active');
+          var link = listItems[delta].querySelector('a');
+          if (link) { link.classList.add('active') }
+        }
 
         // @TODO Abstract most everything after here...
 
