@@ -8,6 +8,7 @@
  *      %param quickTabs {Object} Contains all data about the quick tabs widget.
  *      %param delta {Number} The index of the option that was clicked.
  *      %return {Promise|String} Return a Promise and resolve it with an html string, or just return an html string.
+ *  _panesAttrs {Object} An attributes object for the panes container element.
  * @return {String} The html string of a rendered quick select widget.
  */
 dg.theme_quick_select = function(variables) {
@@ -32,7 +33,7 @@ dg.theme_quick_select = function(variables) {
   html += dg.theme('select', variables._tabs);
 
   // Open the panes container.
-  html += dg.qtPanesOpener();
+  html += dg.qtPanesOpener(dg.qtPanesAttributes(variables));
 
   // Render the panes empty and hidden.
   html += dg.qtPanesEmptyAndHidden(variables);
