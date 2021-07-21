@@ -119,8 +119,8 @@ dg.qtPanesAttributes = function(variables) {
 };
 
 dg.qtPaneDiv = function(attrs, i) {
-  attrs.class.push('quick-tabs-pane');
-  attrs.class.push('hidden');
+  if (!jDrupal.inArray('quick-tabs-pane', attrs.class)) { attrs.class.push('quick-tabs-pane'); }
+  if (!jDrupal.inArray('hidden', attrs.class)) { attrs.class.push('hidden'); }
   attrs['data-quick-tabs-pane'] = '' + i;
   return '<div ' + dg.attributes(attrs) + '></div>';
 };
