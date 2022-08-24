@@ -38,16 +38,22 @@ dg.theme_quick_tabs = function(variables) {
   // Open the wrapper. If bootstrap is present, add a nice css class for the wrapper.
   var html = dg.qtWrapperOpener(variables);
 
-  // Initialize the attributes for the tabs.
+  // If the tabs haven't been loaded before...
   if (!loadedBefore) {
+
+    // Initialize the attributes for the tabs.
     dg.attributesInit(variables._tabs);
     variables._tabs._attributes.class.push('quick-tabs');
 
+    // Indicate the tabs are not yet ready.
+    variables._ready = false;
+
     // Set the quick tabs aside.
     quickTabs = dg_quick_tabs.save(id, variables);
+
   }
 
-  // Render the tabs (or select list)...
+  // Render the tabs (or select list).
   html += dg.theme('item_list', variables._tabs);
 
   // Open the panes container.
@@ -61,6 +67,7 @@ dg.theme_quick_tabs = function(variables) {
 
     // TABS ONLY...
 
+    // TAB CLICK LISTENERS
     // Grab the tabs and attach a click listener to each.
     var listItems = document.querySelectorAll('#' + id + ' .quick-tabs li');
     for (var i = 0; i < listItems.length; i++) {
@@ -170,6 +177,9 @@ dg.theme_quick_tabs = function(variables) {
 
     // If there is a default delta, simulate a click on it to set the default tab.
     if (listItems[defaultDelta]) { listItems[defaultDelta].click(); }
+
+    // Indicate the tabs are ready.
+    quickTabs._ready = true;
 
   }, 1);
 
