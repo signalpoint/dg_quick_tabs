@@ -1,5 +1,9 @@
-dg_quick_tabs.load = function(id) {
+dg_quick_tabs.get = function(id) {
   return dg._quick_tabs[id] ? dg._quick_tabs[id] : null;
+};
+
+dg_quick_tabs.load = function(id) {
+  return new DgQuickTabs(id, dg_quick_tabs.get(id));
 };
 
 dg_quick_tabs.save = function(id, variables) {

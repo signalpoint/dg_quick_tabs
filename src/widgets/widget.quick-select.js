@@ -59,7 +59,7 @@ dg.theme_quick_select = function(variables) {
 
 dg.qtSelectOnchange = function(select) {
   var id = select.getAttribute('data-id');
-  var quickTabs = dg_quick_tabs.load(id);
+  var quickTabs = dg_quick_tabs.get(id);
 
   //console.log('dg.qtSelectOnchange', quickTabs);
 

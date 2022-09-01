@@ -9,7 +9,7 @@ dg.qtWrapperOpener = function(variables) {
 };
 
 dg.qtLoadedBefore = function(id) {
-  var quickTabs = dg_quick_tabs.load(id);
+  var quickTabs = dg_quick_tabs.get(id);
   return !!quickTabs;
 };
 
@@ -22,7 +22,7 @@ dg.qtGetReady = function(id, variables) {
 
   // If they've been loaded before, use them instead of starting fresh.
   if (dg.qtLoadedBefore(id)) {
-    quickTabs = dg_quick_tabs.load(id);
+    quickTabs = dg_quick_tabs.get(id);
     variables = quickTabs; // Overwrite the incoming variables!
   }
   else { // They have not been loaded before.

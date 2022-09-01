@@ -25,7 +25,7 @@ dg.theme_quick_tabs = function(variables) {
   // modifications will be lost upon reload.
 
   // Have these tabs been loaded before?
-  var quickTabs = dg_quick_tabs.load(id);
+  var quickTabs = dg_quick_tabs.get(id);
   var loadedBefore = dg.qtLoadedBefore(id);
 
   // If they've been loaded before, use them instead of starting fresh. Otherwise add the wrapper class.
