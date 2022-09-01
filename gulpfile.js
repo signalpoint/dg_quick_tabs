@@ -9,6 +9,7 @@ var gulp = require('gulp'),
 
 var jsSrc = [
   './src/_dg_quick_tabs.js',
+  './src/classes/class.*.js',
   './src/includes/include.*.js',
   './src/widgets/widget.*.js'
 ];
